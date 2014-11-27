@@ -1,17 +1,40 @@
 package com.trinary.db.entity.test;
 
-import com.trinary.db.reflect.Query;
-import com.trinary.db.reflect.QueryBuilder;
+import com.trinary.db.*;
 
 public class Application {
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
+	public static void main(String[] args) throws Exception {
 		User user = new User("mmain", "password");
 		
-		QueryBuilder qb = new QueryBuilder();
-		Query query1 = qb.createInsertQuery(user);
-		Query query2 = qb.createUpdateQuery(user);
+		Insert<User> insert = new Insert<User>(user);
 		
-		System.out.println(query1.getSql());
-		System.out.println(query2.getSql());
+		Select<User> select = new Select<User>(User.class);
+		
+		Update<User> update = new Update<User>(user);
+		
+		Delete<User> delete = (Delete<User>)new Delete<User>(user);
+		
+		insert.execute();
+		select.execute();
+		select
+			.addFilter(new SimpleFilter("username", "=", "mmain"))
+			.execute();
+		select
+			.exclude("password")
+			.execute();
+		select
+			.include("username")
+			.execute();
+		update.execute();
+		update
+			.set("username", "fartknocker")
+			.set("password", "notpassword")
+			.addFilter(new SimpleFilter("username", "=", "mmain"))
+			.addFilter(
+				new OrFilter()
+					.addFilter(new SimpleFilter("password", "=", "password"))
+					.addFilter(new SimpleFilter("daysUp", ">", "1")))
+			.execute();
+		delete.execute();
 	}
 }

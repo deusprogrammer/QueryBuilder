@@ -1,10 +1,15 @@
 package com.trinary.db.entity.test;
 
 import com.trinary.db.annotation.Column;
+import com.trinary.db.annotation.PrimaryKey;
 import com.trinary.db.annotation.Table;
 
 @Table(name="esign_status_signer")
 public class User {
+	@PrimaryKey
+	protected String type;
+	
+	@PrimaryKey
 	@Column(name="user_nm")
 	protected String username;
 	
@@ -16,6 +21,7 @@ public class User {
 
 	public User(String username, String password) {
 		super();
+		this.type = "MEMBER";
 		this.username = username;
 		this.password = password;
 	}
